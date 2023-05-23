@@ -1,0 +1,3 @@
+input_fastq: "/home/ubuntu/Sysmex_run3/Sysmex_Run2_FC1_fastq/*.fastq.gz"
+output_dir: "fastp_output"
+paired: false

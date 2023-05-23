@@ -1,0 +1,5 @@
+{
+    "input_fastq" : "s3://singulargenomicsdata/SingPublic/Microbiome_NIST19/Illumina_Reference/*_{subset1M_R1,subset1M_R2}.fastq.gz",
+    "output_dir" : "fastp_output",
+    "paired" : true
+}
