@@ -14,7 +14,7 @@ process fastp_se {
     output:
     file "*_fastp.{json,html}" 
     """
-    fastp -i ${fastq} -j ${fastq.simpleName}_fastp.json -h ${fastq.simpleName}_fastp.html --adapter_sequence=${params.adapterF}
+    zcat ${fastq} | fastp --stdin -j ${fastq.simpleName}_fastp.json -h ${fastq.simpleName}_fastp.html
     """
 }
 
@@ -29,7 +29,11 @@ process fastp_pe {
     output:
     file "*_fastp.{json,html}"
     """
-    fastp -i ${fastq[0]} -I ${fastq[1]} -j ${name}_fastp.json -h ${name}_fastp.html --adapter_sequence=${params.adapterF} --adapter_sequence_r2=${params.adapterR}
+    gunzip ${fastq[0]}
+    gzip ${fastq[0].baseName}
+    gunzip ${fastq[1]}
+    gzip ${fastq[1].baseName}
+    fastp -i ${fastq[0]} ${fastq[1]} -j ${name}_fastp.json -h ${name}_fastp.html
     """
 }
 
