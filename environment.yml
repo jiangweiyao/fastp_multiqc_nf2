@@ -91,6 +91,7 @@ dependencies:
   - requests=2.31.0
   - rich=13.3.5
   - rich-click=1.6.1
+  - seqtk=1.4
   - setuptools=67.7.2
   - simplejson=3.19.1
   - six=1.16.0

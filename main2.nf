@@ -29,7 +29,6 @@ process fastp_pe {
     output:
     file "*_fastp.{json,html}"
     """
-    fastp -i ${fastq[0]} ${fastq[1]} -j ${name}_fastp.json -h ${name}_fastp.html
     seqtk mergepe ${fastq[0]} ${fastq[1]} | fastp --stdin --interleaved_in -j ${name}_fastp.json -h ${name}_fastp.html --adapter_sequence=${params.adapterF} --adapter_sequence_r2=${params.adapterR}
     """
 }
