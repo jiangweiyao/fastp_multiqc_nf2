@@ -14,13 +14,13 @@ process fastp_se {
     output:
     file "*_fastp.{json,html}" 
     """
-    zcat ${fastq} | fastp --stdin -j ${fastq.simpleName}_fastp.json -h ${fastq.simpleName}_fastp.html --adapter_sequence=${params.adapterF} -Q -L
+    zcat ${fastq} | fastp --stdin -j ${fastq.simpleName}_fastp.json -h ${fastq.simpleName}_fastp.html --adapter_sequence=${params.adapterF}
     """
 }
 
 process fastp_pe {
-    cpus 6
-    memory 60.GB
+    cpus 12
+    memory 120.GB
     publishDir params.output_dir, mode: 'copy', overwrite: true
 
     input:
@@ -29,7 +29,7 @@ process fastp_pe {
     output:
     file "*_fastp.{json,html}"
     """
-    seqtk mergepe ${fastq[0]} ${fastq[1]} | fastp -w 5 --stdin --interleaved_in -j ${name}_fastp.json -h ${name}_fastp.html --adapter_sequence=${params.adapterF} --adapter_sequence_r2=${params.adapterR} -Q -L
+    seqtk mergepe ${fastq[0]} ${fastq[1]} | fastp -w 12 --stdin --interleaved_in -j ${name}_fastp.json -h ${name}_fastp.html --adapter_sequence=${params.adapterF} --adapter_sequence_r2=${params.adapterR}
     """
 }
 
