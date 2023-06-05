@@ -1,0 +1,28 @@
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Add SHORT_SHA env property with commit short sha
+      run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+    - name: set release date
+      run: |
+        echo "TIME_STAMP=$(date +%s)" >> ${GITHUB_ENV}
+    - name: docker login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}   
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD  
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag jiangweiyao/fastp_seqtk_multiqc:${GITHUB_SHA} --tag jiangweiyao/fastp_seqtk_multiqc:master
+    - name: docker push
+      run: |
+        docker push jiangweiyao/fastp_seqtk_multiqc --all-tags
