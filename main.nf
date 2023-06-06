@@ -5,7 +5,7 @@ nextflow.enable.dsl=2
 
 process fastp_se {
     cpus 4
-    memory 6.GB
+    memory 60.GB
     publishDir params.output_dir, mode: 'copy', overwrite: true
 
     input:
@@ -14,13 +14,13 @@ process fastp_se {
     output:
     file "*_fastp.{json,html}" 
     """
-    fastp -i ${fastq} -j ${fastq.simpleName}_fastp.json -h ${fastq.simpleName}_fastp.html --adapter_sequence=${params.adapterF}
+    zcat ${fastq} | fastp --stdin -j ${fastq.simpleName}_fastp.json -h ${fastq.simpleName}_fastp.html --adapter_sequence=${params.adapterF} -Q -L
     """
 }
 
 process fastp_pe {
-    cpus 4
-    memory 6.GB
+    cpus 6
+    memory 60.GB
     publishDir params.output_dir, mode: 'copy', overwrite: true
 
     input:
@@ -29,7 +29,7 @@ process fastp_pe {
     output:
     file "*_fastp.{json,html}"
     """
-    fastp -i ${fastq[0]} -I ${fastq[1]} -j ${name}_fastp.json -h ${name}_fastp.html --adapter_sequence=${params.adapterF} --adapter_sequence_r2=${params.adapterR}
+    seqtk mergepe ${fastq[0]} ${fastq[1]} | fastp -w 5 --stdin --interleaved_in -j ${name}_fastp.json -h ${name}_fastp.html --adapter_sequence=${params.adapterF} --adapter_sequence_r2=${params.adapterR} -Q -L
     """
 }
 
